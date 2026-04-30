@@ -1,5 +1,17 @@
-import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
-  redirect("/dashboard");
+  return (
+    <div
+      style={{
+        padding: 40,
+      }}
+    >
+      <h1>Dynamo CRM</h1>
+
+      <Link href="/dashboard">
+        Dashboard
+      </Link>
+    </div>
+  );
 }
