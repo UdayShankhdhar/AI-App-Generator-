@@ -21,7 +21,8 @@ export default function DynamicPage() {
   useEffect(() => {
     if (!params?.page) return;
 
-    fetch("http://localhost:5000/api/config")
+     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    fetch(`${API}/api/config`)
       .then((res) => res.json())
       .then((config) => {
         const currentPage = config.pages.find(
