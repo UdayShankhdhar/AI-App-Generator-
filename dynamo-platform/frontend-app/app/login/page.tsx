@@ -9,7 +9,7 @@ export default function LoginPage() {
 
   useEffect(() => {
 
-    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const API = process.env.NEXT_PUBLIC_API_URL;
     fetch(`${API}/api/config`)
       .then((res) => res.json())
       .then(setConfig);
