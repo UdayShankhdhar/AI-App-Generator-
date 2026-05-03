@@ -6,7 +6,7 @@ import DynamicTable from "@/components/DynamicTable";
 import DynamicForm from "@/components/DynamicForm";
 import Dashboard from "@/components/Dashboard";
 import Notifications from "@/components/Notifications";
-import config from "../../../shared/Example.config.json";
+fs.readFileSync("../../../shared/Example.config.json");
 import CsvImport from "@/components/CsvImport";
 import { useRouter } from "next/navigation";
 
