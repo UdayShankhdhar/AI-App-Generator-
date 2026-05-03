@@ -23,7 +23,7 @@ export async function loadConfig(forceReload = false): Promise<AppConfig> {
   let rawConfig: unknown = null;
 
   // Try loading from file first
-  const configPath = path.resolve(__dirname, '../../../shared/example.config.json');
+  const configPath = path.resolve(process.cwd(), 'example.config.json');
 
   if (fs.existsSync(configPath)) {
     try {
