@@ -1,0 +1,328 @@
+{
+  "app": {
+    "name": "Dynamo CRM",
+    "description": "A config-driven CRM platform",
+    "version": "1.0.0",
+    "locale": "en",
+    "theme": {
+      "primaryColor": "#6366f1",
+      "mode": "light"
+    }
+  },
+  "auth": {
+    "enabled": true,
+    "methods": ["email"],
+    "roles": ["admin", "manager", "user"],
+    "defaultRole": "user",
+    "ui": {
+      "title": "Welcome to Dynamo CRM",
+      "subtitle": "Sign in to continue"
+    }
+  },
+  "i18n": {
+    "defaultLocale": "en",
+    "supportedLocales": ["en", "es", "fr", "de", "hi"],
+    "translations": {
+      "es": {
+        "nav.dashboard": "Panel",
+        "nav.contacts": "Contactos",
+        "nav.deals": "Negocios",
+        "nav.import": "Importar",
+        "nav.notifications": "Notificaciones",
+        "common.save": "Guardar",
+        "common.cancel": "Cancelar",
+        "common.delete": "Eliminar",
+        "common.edit": "Editar",
+        "common.search": "Buscar"
+      },
+      "fr": {
+        "nav.dashboard": "Tableau de bord",
+        "nav.contacts": "Contacts",
+        "nav.deals": "Affaires",
+        "nav.import": "Importer",
+        "nav.notifications": "Notifications",
+        "common.save": "Enregistrer",
+        "common.cancel": "Annuler",
+        "common.delete": "Supprimer",
+        "common.edit": "Modifier",
+        "common.search": "Rechercher"
+      },
+      "de": {
+        "nav.dashboard": "Dashboard",
+        "nav.contacts": "Kontakte",
+        "nav.deals": "Deals",
+        "nav.import": "Importieren",
+        "nav.notifications": "Benachrichtigungen",
+        "common.save": "Speichern",
+        "common.cancel": "Abbrechen",
+        "common.delete": "Löschen",
+        "common.edit": "Bearbeiten",
+        "common.search": "Suchen"
+      },
+      "hi": {
+        "nav.dashboard": "डैशबोर्ड",
+        "nav.contacts": "संपर्क",
+        "nav.deals": "सौदे",
+        "nav.import": "आयात",
+        "nav.notifications": "सूचनाएं",
+        "common.save": "सहेजें",
+        "common.cancel": "रद्द करें",
+        "common.delete": "हटाएं",
+        "common.edit": "संपादित करें",
+        "common.search": "खोजें"
+      }
+    }
+  },
+  "database": {
+    "tables": [
+      {
+        "name": "contacts",
+        "displayName": "Contacts",
+        "timestamps": true,
+        "userScoped": false,
+        "fields": [
+          { "name": "name", "type": "text", "label": "Full Name", "required": true },
+          { "name": "email", "type": "email", "label": "Email", "required": true, "unique": true },
+          { "name": "phone", "type": "text", "label": "Phone" },
+          { "name": "company", "type": "text", "label": "Company" },
+          {
+            "name": "status",
+            "type": "select",
+            "label": "Status",
+            "options": [
+              { "value": "lead", "label": "Lead" },
+              { "value": "prospect", "label": "Prospect" },
+              { "value": "customer", "label": "Customer" },
+              { "value": "churned", "label": "Churned" }
+            ],
+            "default": "lead"
+          },
+          { "name": "notes", "type": "textarea", "label": "Notes" }
+        ]
+      },
+      {
+        "name": "deals",
+        "displayName": "Deals",
+        "timestamps": true,
+        "fields": [
+          { "name": "title", "type": "text", "label": "Deal Title", "required": true },
+          { "name": "value", "type": "number", "label": "Value ($)" },
+          {
+            "name": "stage",
+            "type": "select",
+            "label": "Stage",
+            "options": [
+              { "value": "prospecting", "label": "Prospecting" },
+              { "value": "qualification", "label": "Qualification" },
+              { "value": "proposal", "label": "Proposal" },
+              { "value": "negotiation", "label": "Negotiation" },
+              { "value": "closed_won", "label": "Closed Won" },
+              { "value": "closed_lost", "label": "Closed Lost" }
+            ],
+            "default": "prospecting"
+          },
+          { "name": "contact_id", "type": "text", "label": "Contact ID" },
+          { "name": "close_date", "type": "date", "label": "Expected Close" },
+          { "name": "notes", "type": "textarea", "label": "Notes" }
+        ]
+      },
+      {
+        "name": "tasks",
+        "displayName": "Tasks",
+        "timestamps": true,
+        "userScoped": true,
+        "fields": [
+          { "name": "title", "type": "text", "label": "Task", "required": true },
+          { "name": "due_date", "type": "date", "label": "Due Date" },
+          {
+            "name": "priority",
+            "type": "select",
+            "label": "Priority",
+            "options": [
+              { "value": "low", "label": "Low" },
+              { "value": "medium", "label": "Medium" },
+              { "value": "high", "label": "High" }
+            ],
+            "default": "medium"
+          },
+          { "name": "completed", "type": "boolean", "label": "Completed", "default": false }
+        ]
+      },
+      {
+        "name": "products",
+        "displayName": "Products",
+        "timestamps": true,
+        "fields": [
+          {
+            "name": "title",
+            "type": "text",
+            "label": "Product Title",
+            "required": true
+          },
+          {
+            "name": "price",
+            "type": "number",
+            "label": "Price"
+          },
+          {
+            "name": "in_stock",
+            "type": "boolean",
+            "label": "In Stock",
+            "default": true
+          }
+        ]
+      }
+    ]
+  },
+  "pages": [
+    {
+      "id": "dashboard",
+      "title": "Dashboard",
+      "path": "/dashboard",
+      "icon": "LayoutDashboard",
+      "components": [
+        {
+          "type": "dashboard",
+          "title": "Overview",
+          "metrics": [
+            { "label": "Total Contacts", "dataSource": "contacts", "aggregation": "count", "icon": "Users" },
+            { "label": "Active Deals", "dataSource": "deals", "aggregation": "count", "icon": "TrendingUp" },
+            { "label": "Deal Value", "dataSource": "deals", "aggregation": "sum", "field": "value", "icon": "DollarSign" },
+            { "label": "Open Tasks", "dataSource": "tasks", "aggregation": "count", "icon": "CheckSquare" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "contacts",
+      "title": "Contacts",
+      "path": "/contacts",
+      "icon": "Users",
+      "components": [
+        {
+          "type": "table",
+          "title": "All Contacts",
+          "dataSource": "contacts",
+          "columns": ["name", "email", "company", "status", "created_at"],
+          "actions": ["view", "edit", "delete"],
+          "pagination": true,
+          "pageSize": 10,
+          "searchable": true,
+          "exportCsv": true
+        }
+      ]
+    },
+    {
+      "id": "new-contact",
+      "title": "New Contact",
+      "path": "/contacts/new",
+      "hidden": true,
+      "components": [
+        {
+          "type": "form",
+          "title": "Add Contact",
+          "dataSource": "contacts",
+          "submitLabel": "Save Contact",
+          "redirectAfterSubmit": "contacts"
+        }
+      ]
+    },
+    {
+      "id": "deals",
+      "title": "Deals",
+      "path": "/deals",
+      "icon": "TrendingUp",
+      "components": [
+        {
+          "type": "table",
+          "title": "Pipeline",
+          "dataSource": "deals",
+          "columns": ["title", "value", "stage", "close_date"],
+          "actions": ["view", "edit", "delete"],
+          "pagination": true,
+          "searchable": true
+        }
+      ]
+    },
+    {
+      "id": "import",
+      "title": "CSV Import",
+      "path": "/import",
+      "icon": "Upload",
+      "components": [
+        {
+          "type": "csv-import",
+          "title": "Import Contacts from CSV",
+          "dataSource": "contacts",
+          "fieldMapping": {
+            "Name": "name",
+            "Email": "email",
+            "Phone": "phone",
+            "Company": "company"
+          }
+        }
+      ]
+    },
+    {
+      "id": "notifications",
+      "title": "Notifications",
+      "path": "/notifications",
+      "icon": "Bell",
+      "components": [
+        {
+          "type": "notifications",
+          "title": "Recent Activity"
+        }
+      ]
+    },
+    {
+  "id": "products",
+  "title": "Products",
+  "path": "/products",
+  "icon": "Package",
+  "components": [
+    {
+      "type": "table",
+      "title": "All Products",
+      "dataSource": "products"
+    },
+    {
+  "type": "form",
+  "title": "Create Product",
+  "dataSource": "products"
+}
+  ]
+  }
+  ],
+  "notifications": [
+    {
+      "id": "contact-created",
+      "trigger": "record.created",
+      "dataSource": "contacts",
+      "channels": ["in-app", "email"],
+      "template": {
+        "subject": "New contact added: {{name}}",
+        "body": "A new contact {{name}} ({{email}}) has been added to your CRM."
+      }
+    },
+    {
+      "id": "deal-created",
+      "trigger": "record.created",
+      "dataSource": "deals",
+      "channels": ["in-app"],
+      "template": {
+        "subject": "New deal: {{title}}",
+        "body": "Deal '{{title}}' worth ${{value}} has been created in stage '{{stage}}'."
+      }
+    },
+    {
+      "id": "csv-imported",
+      "trigger": "csv.imported",
+      "channels": ["in-app", "email"],
+      "template": {
+        "subject": "CSV Import Complete",
+        "body": "Your CSV import has completed successfully. {{count}} records were imported."
+      }
+    }
+  ]
+}
