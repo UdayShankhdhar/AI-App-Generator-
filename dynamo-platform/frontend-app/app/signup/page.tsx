@@ -1,25 +1,32 @@
-// app/signup/page.tsx
-
 "use client";
 
 import { useState } from "react";
 
 export default function SignupPage() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignup = (e: React.FormEvent) => {
+  async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
 
-    console.log({
-      name,
-      email,
-      password,
-    });
+    const res = await fetch(
+      "https://YOUR-BACKEND-URL/api/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    );
 
-    alert("Signup Successful!");
-  };
+    const data = await res.json();
+
+    alert(JSON.stringify(data));
+  }
 
   return (
     <div
@@ -28,72 +35,32 @@ export default function SignupPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f4f4f4",
       }}
     >
-      <form
-        onSubmit={handleSignup}
-        style={{
-          background: "white",
-          padding: "30px",
-          borderRadius: "10px",
-          width: "350px",
-          boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-          Signup
-        </h1>
-
-        <input
-          type="text"
-          placeholder="Enter Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px",
-            marginBottom: "15px",
-          }}
-        />
+      <form onSubmit={handleSignup}>
+        <h1>Signup</h1>
 
         <input
           type="email"
-          placeholder="Enter Email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px",
-            marginBottom: "15px",
-          }}
         />
+
+        <br />
+        <br />
 
         <input
           type="password"
-          placeholder="Enter Password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px",
-            marginBottom: "20px",
-          }}
         />
 
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            background: "black",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Signup
-        </button>
+        <br />
+        <br />
+
+        <button type="submit">Signup</button>
       </form>
     </div>
   );
