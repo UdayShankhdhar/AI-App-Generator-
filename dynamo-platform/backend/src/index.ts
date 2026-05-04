@@ -18,7 +18,14 @@ async function setupDatabase() {
     console.error("Config or database configuration is missing");
     return;
   }
+  async function setupDatabase() {
 
+  await query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      email TEXT
+    );
+  `);
   for (const table of config.database.tables) {
     const sql = generateCreateTableSQL(table);
     console.log("Creating table:", table.name);
