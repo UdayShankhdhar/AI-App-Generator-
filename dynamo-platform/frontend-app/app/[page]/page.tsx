@@ -14,41 +14,31 @@ export default function DynamicPage() {
   const params = useParams();
   const router = useRouter();
 
-  const [pageConfig, setPageConfig] = useState<any>(null);
+  const [pageConfig, setPageConfig] =
+    useState<any>(null);
 
   useEffect(() => {
     if (!params?.page) return;
 
-    // Ignore auth pages
-    if (
-      params.page === "signup" ||
-      params.page === "login"
-    ) {
-      return;
-    }
-
-    const API = process.env.NEXT_PUBLIC_API_URL;
+    const API =
+      process.env.NEXT_PUBLIC_API_URL;
 
     fetch(`${API}/api/config`)
       .then((res) => res.json())
       .then((config) => {
-        const currentPage = config.pages.find(
-          (p: any) =>
-            p.id === params.page ||
-            p.path === `/${params.page}`
-        );
+        const currentPage =
+          config.pages.find(
+            (p: any) =>
+              p.id === params.page ||
+              p.path === `/${params.page}`
+          );
 
         setPageConfig(currentPage);
+      })
+      .catch((err) => {
+        console.error(err);
       });
   }, [params]);
-
-  // Prevent loading forever
-  if (
-    params.page === "signup" ||
-    params.page === "login"
-  ) {
-    return null;
-  }
 
   if (!pageConfig) {
     return <div>Page not found</div>;
@@ -59,7 +49,8 @@ export default function DynamicPage() {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent:
+            "space-between",
           alignItems: "center",
           marginBottom: 20,
         }}
@@ -94,13 +85,18 @@ export default function DynamicPage() {
       </div>
 
       {pageConfig.components.map(
-        (component: any, index: number) => {
+        (
+          component: any,
+          index: number
+        ) => {
           switch (component.type) {
             case "table":
               return (
                 <DynamicTable
                   key={index}
-                  dataSource={component.dataSource}
+                  dataSource={
+                    component.dataSource
+                  }
                 />
               );
 
@@ -108,7 +104,9 @@ export default function DynamicPage() {
               return (
                 <DynamicForm
                   key={index}
-                  dataSource={component.dataSource}
+                  dataSource={
+                    component.dataSource
+                  }
                 />
               );
 
@@ -116,7 +114,9 @@ export default function DynamicPage() {
               return (
                 <Dashboard
                   key={index}
-                  metrics={component.metrics}
+                  metrics={
+                    component.metrics
+                  }
                 />
               );
 
@@ -124,7 +124,9 @@ export default function DynamicPage() {
               return (
                 <Notifications
                   key={index}
-                  notifications={config.notifications}
+                  notifications={
+                    config.notifications
+                  }
                 />
               );
 
@@ -132,7 +134,9 @@ export default function DynamicPage() {
               return (
                 <CsvImport
                   key={index}
-                  dataSource={component.dataSource}
+                  dataSource={
+                    component.dataSource
+                  }
                 />
               );
 
