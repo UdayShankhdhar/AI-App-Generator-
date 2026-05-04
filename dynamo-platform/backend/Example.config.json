@@ -176,6 +176,28 @@
   },
   "pages": [
     {
+  "id": "signup",
+  "title": "Signup",
+  "path": "/signup",
+  "components": [
+    {
+      "type": "form",
+      "title": "Signup Form"
+    }
+  ]
+},
+    {
+  "id": "login",
+  "title": "Login",
+  "path": "/login",
+  "components": [
+    {
+      "type": "form",
+      "title": "Login Form"
+    }
+  ]
+},
+    {
       "id": "dashboard",
       "title": "Dashboard",
       "path": "/dashboard",
