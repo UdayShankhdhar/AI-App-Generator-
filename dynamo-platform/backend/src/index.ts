@@ -18,7 +18,6 @@ async function setupDatabase() {
     console.error("Config or database configuration is missing");
     return;
   }
-  async function setupDatabase() {
 
   await query(`
     CREATE TABLE IF NOT EXISTS users (
