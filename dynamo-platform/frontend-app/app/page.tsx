@@ -1,16 +1,24 @@
 import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div
       style={{
-        padding: 40,
+        display: "flex",
+        flexDirection: "column",
+        gap: 20,
+        alignItems: "center",
+        marginTop: 100,
       }}
     >
-      <h1>Dynamo CRM</h1>
+      <h1>Dynamo Platform</h1>
 
-      <Link href="/dashboard">
-        Dashboard
+      <Link href="/login">
+        <button>Login</button>
+      </Link>
+
+      <Link href="/signup">
+        <button>Signup</button>
       </Link>
     </div>
   );
