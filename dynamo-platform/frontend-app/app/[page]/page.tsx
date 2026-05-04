@@ -20,7 +20,12 @@ export default function DynamicPage() {
 
   useEffect(() => {
     if (!params?.page) return;
+    const reservedRoutes = ["login", "signup"];
 
+if (reservedRoutes.includes(params.page as string)) {
+  router.push(`/${params.page}`);
+  return;
+}
      const API = process.env.NEXT_PUBLIC_API_URL;
     fetch(`${API}/api/config`)
       .then((res) => res.json())
