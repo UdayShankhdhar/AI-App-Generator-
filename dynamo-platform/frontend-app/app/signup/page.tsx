@@ -10,7 +10,7 @@ export default function SignupPage() {
     e.preventDefault();
 
     const res = await fetch(
-      "https://YOUR-BACKEND-URL/api/signup",
+      "https://ai-app-generator-9vqd.onrender.com/api/signup",
       {
         method: "POST",
         headers: {
