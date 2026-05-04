@@ -18,9 +18,15 @@ export default function RootLayout({
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/api/config")
+    fetch("https://ai-app-generator-9vqd.onrender.com/api/congig")
       .then((res) => res.json())
-      .then(setConfig);
+      .then((data) => {
+        console.log(data);
+        setConfig(data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 
   }, []);
 
