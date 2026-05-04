@@ -21,8 +21,10 @@ async function setupDatabase() {
 
   await query(`
     CREATE TABLE IF NOT EXISTS users (
-      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      email TEXT
+       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
     );
   `);
   for (const table of config.database.tables) {
@@ -47,7 +49,46 @@ async function setupDatabase() {
 
   console.log("Database setup complete");
 })();
+app.post('/api/signup', async (req, res) => {
+  const { email, password } = req.body;
 
+  const hashed = await bcrypt.hash(password, 10);
+
+  await query(
+    'INSERT INTO users(email, password) VALUES($1, $2)',
+    [email, hashed]
+  );
+
+  res.json({ success: true });
+});
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  const result = await query(
+    'SELECT * FROM users WHERE email=$1',
+    [email]
+  );
+
+  const user = result.rows[0];
+
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const valid = await bcrypt.compare(password, user.password);
+
+  if (!valid) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const token = jwt.sign(
+    { id: user.id, email: user.email },
+    process.env.JWT_SECRET!,
+    { expiresIn: '7d' }
+  );
+
+  res.json({ token });
+});
 app.get('/api/users', async (req, res) => {
   try {
     const result = await query('SELECT id, email, role FROM users');
