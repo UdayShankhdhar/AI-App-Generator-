@@ -15,18 +15,20 @@ export default function DynamicPage() {
   const router = useRouter();
 
   const [pageConfig, setPageConfig] = useState<any>(null);
-  const [showForm, setShowForm] =
-  useState(false);
 
   useEffect(() => {
     if (!params?.page) return;
-    const reservedRoutes = ["login", "signup"];
 
-if (reservedRoutes.includes(params.page as string)) {
-  router.push(`/${params.page}`);
-  return;
-}
-     const API = process.env.NEXT_PUBLIC_API_URL;
+    // Ignore auth pages
+    if (
+      params.page === "signup" ||
+      params.page === "login"
+    ) {
+      return;
+    }
+
+    const API = process.env.NEXT_PUBLIC_API_URL;
+
     fetch(`${API}/api/config`)
       .then((res) => res.json())
       .then((config) => {
@@ -40,102 +42,109 @@ if (reservedRoutes.includes(params.page as string)) {
       });
   }, [params]);
 
+  // Prevent loading forever
+  if (
+    params.page === "signup" ||
+    params.page === "login"
+  ) {
+    return null;
+  }
+
   if (!pageConfig) {
-    return <div>Loading...</div>;
+    return <div>Page not found</div>;
   }
 
   return (
     <div style={{ padding: 20 }}>
       <div
-  style={{
-    display: "flex",
-    justifyContent:
-      "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  }}
->
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 20,
+        }}
+      >
+        <h1>{pageConfig.title}</h1>
 
-  <h1>
-    {pageConfig.title}
-  </h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: 20,
+          }}
+        >
+          <button
+            onClick={() =>
+              router.push("/products/new")
+            }
+            style={{
+              padding: "12px 24px",
+              borderRadius: 12,
+              border: "none",
+              background: "#2563eb",
+              color: "white",
+              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: 16,
+            }}
+          >
+            Create
+          </button>
+        </div>
+      </div>
 
-  <div
-  style={{
-    display: "flex",
-    justifyContent: "flex-end",
-    marginBottom: 20,
-  }}
->
+      {pageConfig.components.map(
+        (component: any, index: number) => {
+          switch (component.type) {
+            case "table":
+              return (
+                <DynamicTable
+                  key={index}
+                  dataSource={component.dataSource}
+                />
+              );
 
- <button
-  onClick={() =>
-    router.push("/products/new")
-  }
-  style={{
-    padding: "12px 24px",
-    borderRadius: 12,
-    border: "none",
-    background: "#2563eb",
-    color: "white",
-    cursor: "pointer",
-    fontWeight: 600,
-    fontSize: 16,
-  }}
->
-  Create
-</button>
-
-</div>
-
-</div>
-
-      {pageConfig.components.map((component: any, index: number) => {
-        switch (component.type) {
-
-          case "table":
-            return (
-              <DynamicTable
-                key={index}
-                dataSource={component.dataSource}
-              />
-            );
             case "form":
-            return (
-              <DynamicForm
-                key={index}
-                dataSource={component.dataSource}
-              />
-            );
+              return (
+                <DynamicForm
+                  key={index}
+                  dataSource={component.dataSource}
+                />
+              );
+
             case "dashboard":
-            return (
-              <Dashboard
-                key={index}
-                metrics={component.metrics}
-              />
-            );
+              return (
+                <Dashboard
+                  key={index}
+                  metrics={component.metrics}
+                />
+              );
+
             case "notifications":
-            return (
-              <Notifications
-                key={index}
-                notifications={config.notifications}
-              />
-            );
+              return (
+                <Notifications
+                  key={index}
+                  notifications={config.notifications}
+                />
+              );
+
             case "csv-import":
-            return (
-              <CsvImport
-                key={index}
-                dataSource={component.dataSource}
-              />
-            );
-          default:
-            return (
-              <div key={index}>
-                Unsupported component
-              </div>
-            );
+              return (
+                <CsvImport
+                  key={index}
+                  dataSource={component.dataSource}
+                />
+              );
+
+            default:
+              return (
+                <div key={index}>
+                  Unsupported component
+                </div>
+              );
+          }
         }
-      })}
+      )}
     </div>
   );
 }
